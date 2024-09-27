@@ -1,12 +1,10 @@
-all: build
+boot.bin: x86/bios_bootloader.asm
+	fasm $^ $@
 
-build:
-    fasm boot.asm
-
-run:
-    qemu-system-x86_64 -net none -drive file=boot.bin,format=raw
+run: boot.bin
+	qemu-system-x86_64 -net none -monitor stdio -drive format=raw,file=boot.bin
 
 clean:
-    rm -f boot.bin
+	rm -f boot.bin
 
-.PHONY: all build run clean
+.PHONY: run clean
