@@ -75,6 +75,13 @@ gdt_descriptor:
 .size dw gdt.end - gdt
 .offset dd gdt
 
+idt:
+.end = $
+
+idt_descriptor:
+.size dw idt.end - idt
+.offset dd idt
+
 boot_drive db 0
 
 db 510 - ($ - $$) dup 0, 0x55, 0xAA
