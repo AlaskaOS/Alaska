@@ -1,6 +1,7 @@
 MBR_SIGNATURE equ 0x55, 0xAA
 
 BIOS_VIDEO_SET_MODE equ 0x0
+BIOS_VIDEO_WRITE_CHARACTER equ 0xE
 
 BIOS_VIDEO_MODE_80x25x4 equ 0x3
 
@@ -88,8 +89,34 @@ stosw
 loop @b
 pop es
 
+cli
+mov word [9*4], keyboard_routine
+mov word [9*4+2], 0x0
+sti
+
+end_loop:
+hlt
+jmp end_loop
+
 jmp halt
 
+keyboard_routine:
+push ax
+in al, 0x60
+
+test al, 0x80
+jne .end
+
+mov ah, BIOS_VIDEO_WRITE_CHARACTER
+int BIOS_VIDEO_INT
+
+.end:
+mov al, 0x20
+out 0x20, al
+pop ax
+iret
+
+last_key_pressed db 'W'
 hw db "Hello, world!"
 hw.size = $ - hw
 
