@@ -89,6 +89,9 @@ stosw
 loop @b
 pop es
 
+mov eax, 0x0
+cpuid
+
 cli
 mov word [9*4], keyboard_routine
 mov word [9*4+2], 0x0
